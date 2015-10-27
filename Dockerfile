@@ -8,10 +8,10 @@ ENV JENKINS_HOME /var/lib/jenkins
 RUN yum install -y \
     java-1.7.0-openjdk \
     openssh-server \
+    openssh-client \
     ruby \
-    git \
-    zip
-    wget
+    rubygem-bundler \
+    git
 
 # Install ChefDK
 RUN yum install -y https://opscode-omnibus-packages.s3.amazonaws.com/el/7/x86_64/chefdk-0.9.0-1.el7.x86_64.rpm
@@ -31,6 +31,7 @@ RUN echo "jenkins:jenkins" | chpasswd
 COPY systemconfig.sh /tmp/systemconfig.sh
 RUN bash -c /tmp/systemconfig.sh
 
+# Clean up mess
 RUN yum clean all && rm -rf /tmp/* /var/tmp/*
 
 # Volumes
@@ -38,6 +39,19 @@ VOLUME /var/lib/jenkins
 
 # Standard SSH port
 EXPOSE 22
+
+# Downgrade User
+USER jenkins
+
+# Copy gemfile and gemrc
+COPY Gemfile $JENKINS_HOME/Gemfile
+COPY gemrc $JENKINS_HOME/.gemrc
+
+# Set directory, install gemfile
+WORKDIR $JENKINS_HOME
+RUN bundle install
+
+RUN /usr/bin/ssh-keygen -A
 
 #Run ssh to connect
 ENTRYPOINT ["/usr/sbin/sshd", "-D"]

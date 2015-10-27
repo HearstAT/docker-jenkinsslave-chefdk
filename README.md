@@ -5,6 +5,12 @@ Container to be utilized with the Jenkins Docker Plugin
 
 This container is to be configured support chef cookbooks and ruby based building/testing.
 
+## Build Info
+* Base Image: centos:7
+* ChefDK Version: 0.9.0
+* Gems
+    * rubocop
+
 ## Usage
 
 
