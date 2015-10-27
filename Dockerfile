@@ -53,5 +53,6 @@ RUN bundle install
 
 RUN /usr/bin/ssh-keygen -A
 
+USER root
 #Run ssh to connect
-ENTRYPOINT ["/usr/sbin/sshd", "-D"]
+CMD ["/usr/sbin/sshd", "-D"]
