@@ -10,6 +10,7 @@ RUN yum install -y \
     openssh-server \
     openssh-client \
     ruby \
+    ruby-devel \
     rubygem-bundler \
     git
 
